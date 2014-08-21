@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>AJAX - JSON</title>
+    <script>
+        /*
+        window.onload = function (){
+            // * DOM Level 1 Specs
+            console.log('loaded window ... 1');
+        };
+        window.onload = function (){
+            // * DOM Level 1 Specs
+            console.log('loaded window ... 2');
+        };
+
+        window.addEventListener('load', function () {
+            // run this code when the load event occurs
+            console.log('loaded window ... 3');
+        });
+
+        window.addEventListener('load', function () {
+            // run this code when the load event occurs
+            console.log('loaded window ... 4');
+        });*/
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // wait for the page to be parsed
+            // register an event handler on the button
+            document.body.firstElementChild.addEventListener('click', function () {
+
+                makeAjaxCall('http://uitr.herokuapp.com/countries');
+
+                makeAjaxCall('http://uitr.herokuapp.com/countries');
+
+            });
+
+            function makeAjaxCall(url){
+                // Make an AJAX call to get country info as JSON
+
+                // create an XMLHttpRequest object
+                // open it up
+                // register an event listener for readystatechange
+                // send/fire the request
+
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', url);
+                xhr.addEventListener('readystatechange', function () {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        var obj = JSON.parse(xhr.responseText);
+                        printCapitals(obj);
+                    }
+                });
+                xhr.send();
+            }
+
+
+            function printCapitals(obj) {
+                var results = document.getElementById('results');
+                // print all the capitals
+                for (var i = 0, len = obj.length; i < len; i++) {
+                    /*console.log( obj[i].name + ': ' + obj[i].capital);*/
+
+                    // div for the country
+                    var div_country = document.createElement('div');
+                    div_country.style.className = 'country';
+
+                    // span for the country name
+                    var span_country_name = document.createElement('span');
+                    span_country_name.innerHTML = obj[i].name;
+                    span_country_name.className = 'name';
+
+                    // span for the country capital
+                    var span_country_capital = document.createElement('span');
+                    span_country_capital.innerHTML = obj[i].capital;
+                    span_country_capital.className = 'capital';
+
+                    // append the spans to the country div
+                    div_country.appendChild(span_country_name);
+                    div_country.appendChild(span_country_capital);
+
+                    // append the country div to the results div
+                    results.appendChild(div_country);
+                }
+            }
+        });
+
+
+
+    </script>
+    <style>
+        body {
+            font: 200 1em 'Helvetica Neue';
+            padding: 3em;
+        }
+        div.country {
+            background-color: #eee;
+            padding: 0.25em;
+            margin: 0.15em;
+            float: left;
+        }
+        span.name {
+            font: 200 1.2em 'Helvetica Neue';
+            display: inline-block;
+            padding: 0.25em 0.55em;
+        }
+        span.capital {
+            font: 200 0.85em 'Helvetica Neue';
+            background-color: #aaa;
+            display: inline-block;
+            border-radius: 0.15em;
+            padding: 0.25em 0.5em;
+        }
+    </style>
+</head>
+<body>
+    <button>Get info on countries</button>
+    <div id="results">
+    </div>
+</body>
+</html>
